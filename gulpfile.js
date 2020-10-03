@@ -3,7 +3,7 @@
 let preprocessor = 'scss', // Preprocessor (sass, scss, less, styl)
   fileswatch = 'html,htm,txt,json,md,woff2', // List of files extensions for watching & hard reload (comma separated)
   imageswatch = 'jpg,jpeg,png,webp,svg', // List of images extensions for watching & compression (comma separated)
-  baseDir = 'app', // Base directory path without «/» at the end
+  baseDir = '', // Base directory path without «/» at the end
   buildDir = 'build',
   online = true; // If «false» - Browsersync will work offline without internet connection
 
@@ -12,42 +12,42 @@ let paths = {
   scripts: {
     src: [
       // 'node_modules/jquery/dist/jquery.min.js', // npm vendor example (npm i --save-dev jquery)
-      baseDir + '/js/app.js' // app.js. Always at the end
+      baseDir + 'js/app.js' // app.js. Always at the end
     ],
-    dest: baseDir + '/js',
+    dest: baseDir + 'js',
     build: buildDir
   },
 
   html: {
     src: [
-      `${baseDir}/sections/*.html`,
-      `!${baseDir}/sections/**/_*.html`],
-    dest: baseDir + '/pages/',
-    build: buildDir + '/pages/'
+      `${baseDir}sections/*.html`,
+      `!${baseDir}sections/**/_*.html`],
+    dest: baseDir + 'pages/',
+    build: buildDir + 'pages/'
   },
 
   styles: {
-    src: baseDir + '/' + preprocessor + '/main.*',
-    dest: baseDir + '/css',
-    build: buildDir + '/css',
+    src: baseDir + '' + preprocessor + '/main.*',
+    dest: baseDir + 'css',
+    build: buildDir + 'css',
   },
 
   images: {
-    src: baseDir + '/assets/images/src/**/*',
-    dest: baseDir + '/assets/images/dest',
-    build: buildDir + '/assets/images',
+    src: baseDir + 'assets/images/src/**/*',
+    dest: baseDir + 'assets/images/dest',
+    build: buildDir + 'assets/images',
   },
 
   fonts: {
-    src: baseDir + '/assets/fonts/**/*',
-    dest: baseDir + '/assets/fonts',
-    build: buildDir + '/assets/fonts',
+    src: baseDir + 'assets/fonts/**/*',
+    dest: baseDir + 'assets/fonts',
+    build: buildDir + 'assets/fonts',
   },
 
   icons: {
-    src: baseDir + '/assets/icons/**/*',
-    dest: baseDir + '/assets/icons',
-    build: buildDir + '/assets/icons',
+    src: baseDir + 'assets/icons/**/*',
+    dest: baseDir + 'assets/icons',
+    build: buildDir + 'assets/icons',
   },
 
   deploy: {
@@ -90,7 +90,7 @@ const gcmq = require('gulp-group-css-media-queries');
 
 function browsersync() {
   browserSync.init({
-    server: {baseDir: `${baseDir}`},
+    server: {baseDir: "./"},
     notify: false,
     online: online
   })
@@ -151,11 +151,13 @@ function deploy() {
 }
 
 function startwatch() {
-  watch(baseDir + '/**/' + preprocessor + '/**/*', styles);
-  watch(baseDir + '/**/sections/**/*', htmlPages);
-  watch(baseDir + '/**/*.{' + imageswatch + '}', images);
-  watch(baseDir + '/**/*.{' + fileswatch + '}').on('change', browserSync.reload);
-  watch([baseDir + '/**/*.js', '!' + paths.scripts.dest + '/*.min.js'], scripts);
+  watch(baseDir + preprocessor + '/**/*', styles);
+  watch(baseDir + 'sections/**/*.scss', styles);
+  watch(baseDir + 'sections/**/*.html', htmlPages);
+  watch(baseDir + '**/*.{' + imageswatch + '}', images);
+  watch(baseDir + '**/*.{' + fileswatch + '}').on('change', browserSync.reload);
+  watch([baseDir + '**/*.js', '!' + paths.scripts.dest + '/*.min.js'], scripts);
+  watch([baseDir + 'sections/**/*.js', '!' + paths.scripts.dest + '/*.min.js'], scripts);
 }
 
 exports.browsersync = browsersync;
